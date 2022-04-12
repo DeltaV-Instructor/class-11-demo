@@ -22,7 +22,7 @@ console.log('pizza js connected');
 
   HTML
     - have a left and right image container in the html
-    - Give them id's so we can select them
+    - Give them id's so we can select them// in demo today we are grab DOM elements differently.
     - let the user know what they are supposed to do
       - instructions
 
@@ -34,7 +34,7 @@ console.log('pizza js connected');
     clicks: 0,
     timesShown: 0,
     url : 'chicagoPizza.jpeg'
-  }
+  };
 
   We need an Array to hold all image Objects
 
@@ -53,9 +53,35 @@ console.log('pizza js connected');
   })
 
   function to display all the clicks at the end () {
-    generate a table or list
+    generate a table or ul list
     populate the data - adds to the inner html of an existing element (table or list)
     divide object's times clicked by total shown
   }
 
 */
+
+
+
+
+
+//constructor function
+function Pizza(name, src){
+  this.name = name;
+  this.src = src;
+  this.views = 0;
+  this.click = 0;
+  //   As we create new instances of our pizza objects we can push those into array using the 'this' and the .push()
+  // built in array method
+  Pizza.allPizzasArray.push(this);
+
+}
+Pizza.allPizzasArray = [];
+
+new Pizza('Brick Oven Pizza', 'assets/images/brickOvenPizza.jpg');
+new Pizza('Calzone', 'assets/images/calzonePizza.jpg');
+new Pizza('Chicago Deep Dish', 'assets/images/chicagoPizza.jpg');
+new Pizza('Chicago Pizza and Oven Grinder', 'assets/images/cpoGinderPizza.jpg');
+new Pizza('Detroit Style', 'assets/images/detroitPizza.jpg');
+new Pizza('Papa Vito\'s Thin', 'assets/images/mwDeluxePizzaThinCrust.jpg');
+new Pizza('New York Thin', 'assets/images/newYorkPizza.jpg');
+new Pizza('Detroit Style', 'assets/images/sgDansHtossedMeatLovPizza.jpg');
