@@ -62,6 +62,19 @@ console.log('pizza js connected');
 
 
 
+//global variables
+let pizzaContainer = document.querySelector('section');
+let resultButton = document.querySelector('section + div');
+let image1 = document.querySelector('section img:first-child');
+let image2 = document.querySelector('section img:nth-child(2)');
+console.log({pizzaContainer, resultButton, image1, image2});
+//track click counts
+let clicks = 0;
+let maxClicksAllowed = 10;
+console.log('click tracking',{clicks, maxClicksAllowed});
+Pizza.allPizzasArray = [];
+
+
 
 
 //constructor function
@@ -75,7 +88,116 @@ function Pizza(name, src){
   Pizza.allPizzasArray.push(this);
 
 }
-Pizza.allPizzasArray = [];
+
+
+
+
+
+
+
+
+
+
+
+
+function getRandomNumber(){
+  return Math.floor(Math.random() * Pizza.allPizzasArray.length);
+}
+
+
+
+
+function renderPizzas(){
+//call the getRandomNumber function
+  let pizza1 = getRandomNumber();
+  let pizza2 = getRandomNumber();
+
+  while(pizza1 === pizza2){
+    pizza2 = getRandomNumber();
+  }
+
+  //capture some data about images so we can show them and track them
+  //update the src for the new images.
+  image1.src = Pizza.allPizzasArray[pizza1].src;
+  image2.src = Pizza.allPizzasArray[pizza2].src;
+  //get random number use it to update the alt attribute for image that is about to be shown based the name from name of the image object the pizza name.
+  image1.alt = Pizza.allPizzasArray[pizza1].name;
+  image2.alt = Pizza.allPizzasArray[pizza2].name;
+
+  //lets track the views 
+  Pizza.allPizzasArray[pizza1].views++;
+  Pizza.allPizzasArray[pizza2].views++;
+
+}
+
+
+
+
+
+
+
+
+function handlePizzaClick(event){
+  if(event.target === pizzaContainer){
+    alert('Please click on an image.');
+  }
+  clicks++;
+  let clickPizza = event.target.alt;
+  for(let i = 0; i < Pizza.allPizzasArray.length; i++){
+    if(clickPizza === Pizza.allPizzasArray[i].name){
+      Pizza.allPizzasArray[i].clicks++;
+      break;
+    }
+  }
+  //do we have max clicks yet?
+  if(clicks === maxClicksAllowed){
+    pizzaContainer.removeEventListener('click', handlePizzaClick);
+    resultButton.addEventListener('click', renderResults);
+    pizzaContainer.className = 'no-voting';
+  } else {
+    renderPizzas();
+  }
+}
+
+
+
+
+
+
+
+function renderResults(){
+  let ul = document.querySelector('ul');
+  for(let i = 0; i < Pizza.allPizzasArray.length; i++){
+    let li = document.createElement('li');
+    li.textContent = `${Pizza.allPizzasArray[i].name} had ${Pizza.allPizzasArray[i].views} views and was clicked on ${Pizza.allPizzasArray[i].clicks} times`;
+    ul.appendChild(li);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+console.log(Pizza.allPizzasArray);
 
 new Pizza('Brick Oven Pizza', 'assets/images/brickOvenPizza.jpg');
 new Pizza('Calzone', 'assets/images/calzonePizza.jpg');
@@ -85,3 +207,11 @@ new Pizza('Detroit Style', 'assets/images/detroitPizza.jpg');
 new Pizza('Papa Vito\'s Thin', 'assets/images/mwDeluxePizzaThinCrust.jpg');
 new Pizza('New York Thin', 'assets/images/newYorkPizza.jpg');
 new Pizza('Detroit Style', 'assets/images/sgDansHtossedMeatLovPizza.jpg');
+
+
+
+renderPizzas();
+
+
+
+pizzaContainer.addEventListener('click', handlePizzaClick);
