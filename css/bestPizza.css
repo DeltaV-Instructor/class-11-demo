@@ -1,0 +1,17 @@
+* {
+  box-sizing: border-box;
+}
+
+body{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  background-color: rgb(244,77,19);
+  color: rgb(101, 48, 10);
+}
+
+main{
+  width: 1024px;
+  margin: 3rem auto;
+  display: grid;
+  grid-template-columns: 250px 4fr;
+  grid-template-rows: 10rem 10rem 20rem 40%;
+}
