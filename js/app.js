@@ -6,12 +6,9 @@ let pizzaContainer = document.querySelector('section');
 // let resultButton = document.querySelector('section + div');
 let image1 = document.querySelector('section img:first-child');
 let image2 = document.querySelector('section img:nth-child(2)');
-
 let clicks = 0;
 let maxClicksAllowed = 10;
-
 Pizza.allPizzasArray = [];
-
 let uniqueImageCount = 4;
 let newPicsToShow = [];
 
@@ -89,36 +86,22 @@ function getRandomNumber(){
 }
 
 function renderPizzas(){
-
   while(newPicsToShow.length < uniqueImageCount){
     let randomNumber = getRandomNumber();
     if(!newPicsToShow.includes(randomNumber)){
       newPicsToShow.push(randomNumber);
     }
   }
-  // console.log('this is our new pics array', newPicsToShow);
 
   let pizza1 = newPicsToShow.shift();
-  // console.log('shift image one ', pizza1, Pizza.allPizzasArray[pizza1].name);
   let pizza2 = newPicsToShow.shift();
-  // console.log('shift image two ', pizza2, Pizza.allPizzasArray[pizza2].name);
   image1.src = Pizza.allPizzasArray[pizza1].src;
   image2.src = Pizza.allPizzasArray[pizza2].src;
-
   image1.alt = Pizza.allPizzasArray[pizza1].name;
   image2.alt = Pizza.allPizzasArray[pizza2].name;
-
   Pizza.allPizzasArray[pizza1].views++;
   Pizza.allPizzasArray[pizza2].views++;
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -149,8 +132,6 @@ function handlePizzaClick(event){
   }
 }
 
-
-
 function renderChart(){
   console.log(Pizza.allPizzasArray);
   let pizzaNames = [];
@@ -163,7 +144,7 @@ function renderChart(){
     pizzaLikes.push(Pizza.allPizzasArray[i].clickedOn);
     pizzaViews.push(Pizza.allPizzasArray[i].views);
   }
-  console.log({pizzaNames, pizzaLikes, pizzaViews});
+  // console.log({pizzaNames, pizzaLikes, pizzaViews});
 
   /* refer to Chart.js > Chart Types > Bar Chart:
   https://www.chartjs.org/docs/latest/charts/bar.html
@@ -220,19 +201,6 @@ function renderChart(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 //starts here with two images ready for click
 renderPizzas();
-
 pizzaContainer.addEventListener('click', handlePizzaClick);
