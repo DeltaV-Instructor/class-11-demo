@@ -1,206 +1,205 @@
 'use strict';
 console.log('pizza js connected');
+//Create an array of pizza objects, have a file for them.
+//dont repeat the correct picture
+//randomize the pizza image placement
+//track a score - score should increment by 1 when the user guess the correct image.
+// TODO a way to track how many attempts they've used - increment attempt in the event handler when any image is clicked
+// TODO some way to play again without having to refresh
+// TODO a way to stop the event listener from doing its thing when the num of attempts reaches a maximum number
+// TODO when they reach the max, show a chart with the score and numAttempts
 
-//global variables
-let pizzaContainer = document.querySelector('section');
-// let resultButton = document.querySelector('section + div');
-let image1 = document.querySelector('section img:first-child');
-let image2 = document.querySelector('section img:nth-child(2)');
-let clicks = 0;
-let maxClicksAllowed = 10;
-Pizza.allPizzasArray = [];
-let uniqueImageCount = 4;
-let newPicsToShow = [];
+// Persistence of data
+// When we persist data, we need to be able to do four things with it:
+// create the data - setItem in localStorage
+// retrieve it
+// update it - setItem in localStorage
+// delete it
 
-//constructor function
-function Pizza(name, src, clickedOn, views){
-  this.name = name;
-  this.src = src;
-  // this.views = 0;
-  // this.clickedOn = 0;
-  if(clickedOn){
-    this.clickedOn = clickedOn;
+
+//Global variables
+const pizzaNames = [
+  'Papa-Vitos-Thin','Chicago-Deep-Dish',
+  'Brick-Oven-Pizza',
+  'Calzone',
+  'Chicago-Pizza-and-Oven-Grinder',
+  'Detroit-Style',
+  'New-York-Thin',
+  'Shot-Gun-Dans'];
+
+let correctPizza = '';
+let wrongPizza = '';
+let attempts = 0;
+const maxAttempts = 10;
+
+
+// get Dom elements from html
+const pizzaNameElement = document.getElementById('pizzaName');
+const scoreElement = document.getElementById('score');
+const attemptsElement = document.getElementById('attempts');
+const pizzaImagesParent = document.getElementById('pizzaImages');
+const responseElement = document.getElementById('response');
+
+
+
+//create set up function
+
+function setup(){
+//random name
+//1.
+  correctPizza = generateRandomPizza();
+  //2.
+  wrongPizza = generateRandomPizza();
+  //3.
+  updatePizzaName(correctPizza);
+
+
+  if(attempts){
+    pizzaImagesParent.removeChild(pizzaImagesParent.lastChild);
+    pizzaImagesParent.removeChild(pizzaImagesParent.lastChild);
+  }
+
+  //need render once we have random image
+  //4.
+  renderPizzaImage(correctPizza);
+  //5.
+  renderPizzaImage(wrongPizza);
+  //update the score
+  //6.
+  updateScoreElement();
+  //update attempts
+  //7.
+  updateAttempts();
+
+}
+setup();
+
+
+
+
+
+
+
+
+//creating a generate random pizza function
+
+function generateRandomPizza(){
+  const index = Math.floor(Math.random() * pizzaNames.length);
+  return pizzaNames[index];
+}
+
+
+function updatePizzaName(pizzaName){
+  pizzaNameElement.textContent = pizzaName;
+}
+
+function renderPizzaImage(pizzaName){
+  const img = document.createElement('img');
+  img.setAttribute('src', 'images/' + pizzaName + '.jpg');
+  img.setAttribute('id', pizzaName);
+  pizzaImagesParent.append(img);
+}
+
+
+//render a respone
+function renderResponse(response){
+  responseElement.textContent = response;
+}
+
+
+//update pizza name
+//render pizza images
+//event listener to render out our respone.
+
+pizzaImagesParent.addEventListener('click', function(event){
+  if(attempts === maxAttempts){
+    return;
+  }
+  const anwser = event.target.getAttribute('id');
+
+  if(anwser === correctPizza){
+    incrementScore();
+    renderResponse('whoo hoo, ZA you right you know your pizza!');
   } else {
-    this.clickedOn = 0;
+    renderResponse('No thats not the correct pizza name for the image! You should eat more pizza.');
   }
-  if(views){
-    this.views = views;
-  } else {
-    this.views = 0;
-  }
+  attempts++;
+  setup();
 
-  Pizza.allPizzasArray.push(this);
-}
-
-
-let savedPizzaString = localStorage.getItem('savedPizza');
-console.log('this is the objects in string form ', savedPizzaString);
+  // if(attempts === maxAttempts){
+  //   draw();
+  //   renderList
+  // }
+});
 
 
-if(savedPizzaString){
-  // parse our string into object
-  let arrayOfNotPizzaObject = JSON.parse(savedPizzaString);
-  console.log('if condition what is our type ',arrayOfNotPizzaObject);
-  //once we have object we are going to run them through our constructor function so that they are Pizza objects.
-  for(let j = 0; j < arrayOfNotPizzaObject.length; j++){
-    new Pizza(
-      arrayOfNotPizzaObject[j].name,
-      arrayOfNotPizzaObject[j].src,
-      arrayOfNotPizzaObject[j].clickedOn,
-      arrayOfNotPizzaObject[j].views
-    );
-  }
-} else {
-  new Pizza('Papa Vito\'s Thin', 'images/mwDeluxePizzaThinCrust.jpg');
-  new Pizza('Chicago Deep Dish', 'images/chicagoPizza.jpg');
-  new Pizza('Brick Oven Pizza', 'images/brickOvenPizza.jpg');
-  new Pizza('Calzone', 'images/calzonePizza.jpg');
-  new Pizza('Chicago Pizza and Oven Grinder', 'images/cpoGinderPizza.jpg');
-  new Pizza('Detroit Style', 'images/detroitPizza.jpg');
-  new Pizza('New York Thin', 'images/newYorkPizza.jpg');
-  new Pizza('Shot Gun Dans', 'images/sgDansHtossedMeatLovPizza.jpg');
+
+//increment
+function incrementScore(){
+  let score = getScore();
+  score++;
+  createorUpdateScore(score);
+  updateScoreElement();
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function getRandomNumber(){
-  return Math.floor(Math.random() * Pizza.allPizzasArray.length);
+function getScore(){
+  let score = localStorage.getItem('scoreValue');
+  if(score !== null){
+    score = parseInt(score);
+  }
+  return score;
 }
 
-function renderPizzas(){
-  while(newPicsToShow.length < uniqueImageCount){
-    let randomNumber = getRandomNumber();
-    if(!newPicsToShow.includes(randomNumber)){
-      newPicsToShow.push(randomNumber);
-    }
-  }
-
-  let pizza1 = newPicsToShow.shift();
-  let pizza2 = newPicsToShow.shift();
-  image1.src = Pizza.allPizzasArray[pizza1].src;
-  image2.src = Pizza.allPizzasArray[pizza2].src;
-  image1.alt = Pizza.allPizzasArray[pizza1].name;
-  image2.alt = Pizza.allPizzasArray[pizza2].name;
-  Pizza.allPizzasArray[pizza1].views++;
-  Pizza.allPizzasArray[pizza2].views++;
-}
-
-
-
-function handlePizzaClick(event){
-  if(event.target === pizzaContainer){
-    alert('Please click on an image.');
-  }
-
-  clicks++;
-  let clickPizzaName = event.target.alt;
-
-  for(let i = 0; i < Pizza.allPizzasArray.length; i++){
-    if(clickPizzaName === Pizza.allPizzasArray[i].name){
-      Pizza.allPizzasArray[i].clickedOn++;
-      break;
-    }
-  }
-
-  if(clicks === maxClicksAllowed){
-
-    pizzaContainer.removeEventListener('click', handlePizzaClick);
-    // resultButton.addEventListener('click', renderResults);
-    pizzaContainer.className = 'no-voting';
-    localStorage.setItem('savedPizza', JSON.stringify(Pizza.allPizzasArray));
-    renderChart();
-  } else {
-    renderPizzas();
-  }
-}
-
-function renderChart(){
-  console.log(Pizza.allPizzasArray);
-  let pizzaNames = [];
-  let pizzaLikes = [];
-  let pizzaViews = [];
-
-  for(let i = 0; i < Pizza.allPizzasArray.length; i++){
-    pizzaNames.push(Pizza.allPizzasArray[i].name);
-    // pizzaNames.push(Pizza.allPizzasArray[i].name);
-    pizzaLikes.push(Pizza.allPizzasArray[i].clickedOn);
-    pizzaViews.push(Pizza.allPizzasArray[i].views);
-  }
-  // console.log({pizzaNames, pizzaLikes, pizzaViews});
-
-  /* refer to Chart.js > Chart Types > Bar Chart:
-  https://www.chartjs.org/docs/latest/charts/bar.html
-  and refer to Chart.js > Getting Started > Getting Started:
-  https://www.chartjs.org/docs/latest/getting-started/ */
-
-
-  const data = {
-    labels: pizzaNames,
-    datasets: [{
-      label: 'Likes',
-      data: pizzaLikes,
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.3)',
-        'rgba(255, 206, 86, 0.9)',
-        'rgba(75, 192, 192, 0.7)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(5, 159, 64, 0.8)',
-        'rgba(5, 159, 64, 0.5)',
-        'rgba(5, 159, 64, 0.3)'
-      ],
-      borderColor: [
-        'rgba(255, 159, 64, 1)'
-      ],
-      borderWidth: 1
-    },
-    {
-      label: 'Views',
-      data: pizzaViews,
-      backgroundColor: ['rgba(255, 159, 64, 0.3)'],
-      borderColor: ['rgba(255, 159, 64, 0.3)'],
-      borderWidth: 1
-    }]
-  };
-
-  const config = {
-    type: 'bar',
-    data: data,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    },
-  };
-    //go grab the canvas element from the html
-  const canvasChart = document.getElementById('myChart').getContext('2d');
-  // eslint-disable-next-line no-undef
-  new Chart(canvasChart, config);
+function createorUpdateScore(scoreValue){
+  //  scoreValue =  scoreValue.toString();
+  scoreValue = JSON.stringify(scoreValue);
+  localStorage.setItem('scoreValue', scoreValue);
+  const score = localStorage.getItem('scoreValue');
+  return score;
 }
 
 
 
 
-//starts here with two images ready for click
-renderPizzas();
-pizzaContainer.addEventListener('click', handlePizzaClick);
+function updateScoreElement(){
+  scoreElement.textContent = getScore() || 0;
+}
+
+function updateAttempts(){
+  attemptsElement.textContent = maxAttempts - attempts;
+}
+
+
+
+
+
+
+//delete score
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
