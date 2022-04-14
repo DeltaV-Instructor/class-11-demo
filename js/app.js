@@ -13,50 +13,72 @@ let uniqueImageCount = 4;
 let newPicsToShow = [];
 
 //constructor function
-function Pizza(name, src, views, clickedOn){
+function Pizza(name, src, clickedOn, views){
   this.name = name;
   this.src = src;
-  if(views){
-    this.views = views;
-  } else{
-    this.views = 0;
-  }
+  // this.views = 0;
+  // this.clickedOn = 0;
   if(clickedOn){
     this.clickedOn = clickedOn;
-
   } else {
     this.clickedOn = 0;
+  }
+  if(views){
+    this.views = views;
+  } else {
+    this.views = 0;
   }
 
   Pizza.allPizzasArray.push(this);
 }
 
-let savedPizzaString = localStorage.getItem('savedPizzaData');
-//this is a string
-// console.log(savedPizzaString);
+
+let savedPizzaString = localStorage.getItem('savedPizza');
+console.log('this is the objects in string form ', savedPizzaString);
+
 
 if(savedPizzaString){
-  //parsing we need to turn our string into an object / its needs to be a pizza object.
+  // parse our string into object
   let arrayOfNotPizzaObject = JSON.parse(savedPizzaString);
-  // console.log('not a pizza object, but an object',arrayOfNotPizzaObject);
+  console.log('if condition what is our type ',arrayOfNotPizzaObject);
+  //once we have object we are going to run them through our constructor function so that they are Pizza objects.
   for(let j = 0; j < arrayOfNotPizzaObject.length; j++){
     new Pizza(
       arrayOfNotPizzaObject[j].name,
       arrayOfNotPizzaObject[j].src,
-      arrayOfNotPizzaObject[j].views,
-      arrayOfNotPizzaObject[j].clickedOn
+      arrayOfNotPizzaObject[j].clickedOn,
+      arrayOfNotPizzaObject[j].views
     );
   }
 } else {
+  new Pizza('Papa Vito\'s Thin', 'images/mwDeluxePizzaThinCrust.jpg');
+  new Pizza('Chicago Deep Dish', 'images/chicagoPizza.jpg');
   new Pizza('Brick Oven Pizza', 'images/brickOvenPizza.jpg');
   new Pizza('Calzone', 'images/calzonePizza.jpg');
-  new Pizza('Chicago Deep Dish', 'images/chicagoPizza.jpg');
   new Pizza('Chicago Pizza and Oven Grinder', 'images/cpoGinderPizza.jpg');
   new Pizza('Detroit Style', 'images/detroitPizza.jpg');
-  new Pizza('Papa Vito\'s Thin', 'images/mwDeluxePizzaThinCrust.jpg');
   new Pizza('New York Thin', 'images/newYorkPizza.jpg');
-  new Pizza('Shot Gun Dans Pizza', 'images/sgDansHtossedMeatLovPizza.jpg');
+  new Pizza('Shot Gun Dans', 'images/sgDansHtossedMeatLovPizza.jpg');
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function getRandomNumber(){
@@ -103,7 +125,7 @@ function handlePizzaClick(event){
     pizzaContainer.removeEventListener('click', handlePizzaClick);
     // resultButton.addEventListener('click', renderResults);
     pizzaContainer.className = 'no-voting';
-    localStorage.setItem('savedPizzaData', JSON.stringify(Pizza.allPizzasArray));
+    localStorage.setItem('savedPizza', JSON.stringify(Pizza.allPizzasArray));
     renderChart();
   } else {
     renderPizzas();
@@ -160,7 +182,7 @@ function renderChart(){
   };
 
   const config = {
-    type: 'pie',
+    type: 'bar',
     data: data,
     options: {
       scales: {
@@ -175,6 +197,7 @@ function renderChart(){
   // eslint-disable-next-line no-undef
   new Chart(canvasChart, config);
 }
+
 
 
 
