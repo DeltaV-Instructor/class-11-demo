@@ -7,7 +7,7 @@ const levees = document.getElementById('levees');
 const randomizer = document.getElementById('randomizer');
 
 randomizer.addEventListener('click', function(){
-  
+
   levees.volume = Math.random();
   console.log('random volume: ',levees.volume);
   levees.autoplay = true;
