@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>Demo 12</title>
+      <link rel="stylesheet" href="css/reset.css">
+      <link rel="stylesheet" href="css/main-style.css">
+      <link rel="stylesheet" href="css/grid.css">
+   </head>
+   <body>
+      <header>
+         <h1>Pizza Tracking</h1>
+         <a href="index.html">Home Page</a>
+      </header>
+
+      <div class="grid">
+
+         <section class="row-full column-a">
+            <ul id="pizza-clicks">
+               <h2>Pizza Likes</h2>
+               <li>Brick Oven Pizza: 0</li>
+               <li>Calzone Pizza : 0</li>
+               <li>Chicago Pizza : 0</li>
+               <li>Oven Grinder Pizza : 0</li>
+               <li>Thin Crust Pizza : 0</li>
+               <li>New York Style : 0</li>
+               <li>Detroit Style Pizza : 0</li>
+               <li>Shot Gun Dans Pizza : 0</li>
+            </ul>
+         </section>
+
+         <section id="all_pizzas"    class="row-full column-b flexFloat">
+
+            <h2>Pizza Pictures</h2>
+
+            <div id="left_pizza">
+               <img id="left_pizza_img" src="images/mwDeluxePizzaThinCrust.jpg" />
+               <h2>What is your favorite Pizza?</h2>
+            </div>
+
+            <div id="right_pizza">
+               <img id="right_pizza_img" src="images/chicagoPizza.jpg"/>
+               <h2>Vote Five Times.</h2>
+            </div>
+         </section>
+
+         
+         <div class="row-full column-c">
+         <canvas id="pizzaChart" width="400" height="400"></canvas>
+            <button id="resultsList" >Click to See Results List</button>
+            <button id="chartResults">Click to See Chart Results</button>
+         </div>
+       
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script src="js/app-11.js"></script>
+   </body>
+</html>
