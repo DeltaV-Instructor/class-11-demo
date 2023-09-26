@@ -1,0 +1,35 @@
+.grid{
+  display: grid;
+  width:1600px;
+  margin: 0 auto;
+  grid-template-columns: 25fr 40fr 20fr 15fr;
+  grid-template-rows: 25fr 25fr 25fr 25fr;
+}
+.row-full {
+  margin-top: 15px;
+  grid-row-start: 1;
+  grid-row-end:5;
+}
+.column-a {
+  background-color: rgb(7, 237, 253);
+
+  grid-column-start: 1 ;
+  grid-column-end: 1;
+}
+.column-b {
+  background-color: rgb(253, 10, 253);
+
+  grid-column-start: 2;
+  grid-column-end: 2;
+}
+.column-c {
+  background-color: rgb(83, 250, 203);
+
+  grid-column-start: 3;
+  grid-column-end: 3;
+}
+.column-d {
+  background-color: rgba(168, 24, 252, 0.39);
+  grid-column-start: 4;
+  grid-column-end: 4;
+}
